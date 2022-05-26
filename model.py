@@ -82,10 +82,21 @@ def _preprocess_data(data):
             'Seville_rain_1h', 'Bilbao_snow_3h', 'Barcelona_pressure', 'Seville_rain_3h',
             'Madrid_rain_1h', 'Barcelona_rain_3h', 'Valencia_snow_3h']
 
+
     from sklearn.preprocessing import MinMaxScaler
     normalize = MinMaxScaler()
 
+
+
     df_train[features]=normalize.fit_transform(df_train[features])
+    X_df_train = df_train.drop(labels = ['Unnamed: 0', 'time'], axis = 1)
+
+    #Regularixing the data 
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_df_train)
+    X_standardise = pd.DataFrame(X_scaled,columns=X_df_train.columns)
+    X_standardise.head()
 
     return df_train
 
