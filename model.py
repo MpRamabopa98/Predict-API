@@ -62,8 +62,11 @@ def _preprocess_data(data):
     # ------------------------------------------------------------------------
 
     # create new features from the time column 
-    df_train['time']=pd.to_datetime(df_train['time'], infer_datetime_format=True) 
-    df_train['time']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
+    df_train['time'] = pd.to_datetime(df_train.time)
+    df_train['time'] = (df_train['time'] - df_train['time'].min())  / np.timedelta64(1,'D')
+
+    # df_train['time']=pd.to_datetime(df_train['time'], infer_datetime_format=True) 
+    # df_train['time']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
 
     # df_train['time_int'].dtypes
     df_train['Valencia_wind_deg'].replace({'level_5':5, 'level_10':10, 'level_9':9, 'level_8':8, 'level_7':7, 'level_6':6,
