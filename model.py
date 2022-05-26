@@ -61,6 +61,12 @@ def _preprocess_data(data):
     # predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
     # ------------------------------------------------------------------------
 
+    for i in df_train.columns.to_list():
+        if (df_train[i].dtype =='float64' or df_train[i].dtype =='int64'):
+           df_train[i] = df_train[i].fillna(value=df_train[i].mean())
+        else:
+            df_train[i] = df_train[i].fillna(value=df_train[i].mode())
+
     # create new features from the time column 
     df_train['time'] = pd.to_datetime(df_train.time)
     df_train['time'] = (df_train['time'] - df_train['time'].min())  / np.timedelta64(1,'D')
