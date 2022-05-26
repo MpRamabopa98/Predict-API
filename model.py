@@ -63,7 +63,7 @@ def _preprocess_data(data):
 
     # create new features from the time column 
     df_train['time']=pd.to_datetime(df_train['time'], infer_datetime_format=True) 
-    df_train['time_int']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
+    df_train['time']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
 
     # df_train['time_int'].dtypes
     df_train['Valencia_wind_deg'].replace({'level_5':5, 'level_10':10, 'level_9':9, 'level_8':8, 'level_7':7, 'level_6':6,
@@ -89,7 +89,7 @@ def _preprocess_data(data):
 
 
     df_train[features]=normalize.fit_transform(df_train[features])
-    X_df_train = df_train.drop(labels = ['Unnamed: 0', 'time'], axis = 1)
+    X_df_train = df_train.drop(labels = ['Unnamed: 0'], axis = 1)
 
     #Regularixing the data 
     from sklearn.preprocessing import StandardScaler
