@@ -45,9 +45,9 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
     """
     # Convert the json string to a python dictionary object
-    feature_vector_dict = json.loads(data)
+    df_train = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
-    feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
+    df_train = pd.DataFrame.from_dict([df_train])
 
     # ---------------------------------------------------------------
     # NOTE: You will need to swap the lines below for your own data
@@ -58,10 +58,29 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-    predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
+    # predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
     # ------------------------------------------------------------------------
 
-    return predict_vector
+    # create new features from the time column 
+    df_train['time']=pd.to_datetime(df_train['time'], infer_datetime_format=True) 
+    df_train['time_int']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
+
+    # df_train['time_int'].dtypes
+
+    #Normalize 23 features
+    features = ['Bilbao_pressure', 'Madrid_weather_id', 'Barcelona_weather_id', 'Seville_weather_id',
+            'Valencia_pressure', 'Madrid_pressure', 'Bilbao_weather_id', 'Madrid_wind_speed',
+            'Bilbao_rain_1h', 'Valencia_wind_speed', 'Bilbao_wind_speed', 'Seville_clouds_all',
+            'Barcelona_wind_speed', 'Madrid_clouds_all', 'Seville_wind_speed', 'Barcelona_rain_1h',
+            'Seville_rain_1h', 'Bilbao_snow_3h', 'Barcelona_pressure', 'Seville_rain_3h',
+            'Madrid_rain_1h', 'Barcelona_rain_3h', 'Valencia_snow_3h']
+
+    from sklearn.preprocessing import MinMaxScaler
+    normalize = MinMaxScaler()
+
+    df_train[features]=normalize.fit_transform(df_train[features])
+
+    return df_train
 
 def load_model(path_to_model:str):
     """Adapter function to load our pretrained model into memory.
