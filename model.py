@@ -66,6 +66,13 @@ def _preprocess_data(data):
     df_train['time_int']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
 
     # df_train['time_int'].dtypes
+    df_train['Valencia_wind_deg'].replace({'level_5':5, 'level_10':10, 'level_9':9, 'level_8':8, 'level_7':7, 'level_6':6,
+       'level_4':4, 'level_3':3, 'level_1':1, 'level_2':2},inplace=True)
+
+    #Replacing the Seville_pressure string values with numeric values 
+    df_train['Seville_pressure'].replace({'sp25':25, 'sp23':23, 'sp24':24, 'sp21':21, 'sp16':16, 'sp9':9, 'sp15':15, 'sp19':19,
+       'sp22':22, 'sp11':11, 'sp8':8, 'sp4':4, 'sp6':6, 'sp13':13, 'sp17':17, 'sp20':20,
+       'sp18':18, 'sp14':14, 'sp12':12, 'sp5':5, 'sp10':10, 'sp7':7, 'sp3':3, 'sp2':2, 'sp1':1},inplace=True)
 
     #Normalize 23 features
     features = ['Bilbao_pressure', 'Madrid_weather_id', 'Barcelona_weather_id', 'Seville_weather_id',
