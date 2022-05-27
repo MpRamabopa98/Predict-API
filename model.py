@@ -61,51 +61,14 @@ def _preprocess_data(data):
     # predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
     # ------------------------------------------------------------------------
 
-    for i in df_train.columns.to_list():
-        if (df_train[i].dtype =='float64' or df_train[i].dtype =='int64'):
-           df_train[i] = df_train[i].fillna(value=df_train[i].mean())
-        else:
-            df_train[i] = df_train[i].fillna(value=df_train[i].mode())
-
-    # create new features from the time column 
-    df_train['time'] = pd.to_datetime(df_train.time)
-    df_train['time'] = (df_train['time'] - df_train['time'].min())  / np.timedelta64(1,'D')
-
-    # df_train['time']=pd.to_datetime(df_train['time'], infer_datetime_format=True) 
-    # df_train['time']= pd.to_numeric(df_train['time'].dt.strftime("%Y%m%d%H%M%S"))
-
-    # df_train['time_int'].dtypes
-    df_train['Valencia_wind_deg'].replace({'level_5':5, 'level_10':10, 'level_9':9, 'level_8':8, 'level_7':7, 'level_6':6,
-       'level_4':4, 'level_3':3, 'level_1':1, 'level_2':2},inplace=True)
-
-    #Replacing the Seville_pressure string values with numeric values 
-    df_train['Seville_pressure'].replace({'sp25':25, 'sp23':23, 'sp24':24, 'sp21':21, 'sp16':16, 'sp9':9, 'sp15':15, 'sp19':19,
-       'sp22':22, 'sp11':11, 'sp8':8, 'sp4':4, 'sp6':6, 'sp13':13, 'sp17':17, 'sp20':20,
-       'sp18':18, 'sp14':14, 'sp12':12, 'sp5':5, 'sp10':10, 'sp7':7, 'sp3':3, 'sp2':2, 'sp1':1},inplace=True)
-
-    #Normalize 23 features
     features = ['Bilbao_pressure', 'Madrid_weather_id', 'Barcelona_weather_id', 'Seville_weather_id',
-            'Valencia_pressure', 'Madrid_pressure', 'Bilbao_weather_id', 'Madrid_wind_speed',
+            'Madrid_pressure', 'Bilbao_weather_id', 'Madrid_wind_speed',
             'Bilbao_rain_1h', 'Valencia_wind_speed', 'Bilbao_wind_speed', 'Seville_clouds_all',
             'Barcelona_wind_speed', 'Madrid_clouds_all', 'Seville_wind_speed', 'Barcelona_rain_1h',
             'Seville_rain_1h', 'Bilbao_snow_3h', 'Barcelona_pressure', 'Seville_rain_3h',
             'Madrid_rain_1h', 'Barcelona_rain_3h', 'Valencia_snow_3h']
 
-
-    from sklearn.preprocessing import MinMaxScaler
-    normalize = MinMaxScaler()
-
-
-
-    df_train[features]=normalize.fit_transform(df_train[features])
-    X_df_train = df_train.drop(labels = ['Unnamed: 0'], axis = 1)
-
-    #Regularixing the data 
-    from sklearn.preprocessing import StandardScaler
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_df_train)
-    X_standardise = pd.DataFrame(X_scaled,columns=X_df_train.columns)
-    X_standardise.head()
+    X=data[features]
 
     return df_train
 
