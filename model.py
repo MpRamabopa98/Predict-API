@@ -45,9 +45,9 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
     """
     # Convert the json string to a python dictionary object
-    df_train = json.loads(data)
+    feature_vector_df = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
-    df_train = pd.DataFrame.from_dict([df_train])
+    df_train = pd.DataFrame.from_dict([feature_vector_df])
 
     # ---------------------------------------------------------------
     # NOTE: You will need to swap the lines below for your own data
@@ -58,19 +58,17 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-    # predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
-    # ------------------------------------------------------------------------
 
-    features = ['Bilbao_pressure', 'Madrid_weather_id', 'Barcelona_weather_id', 'Seville_weather_id',
+    predict_vector = df_train[['Bilbao_pressure', 'Madrid_weather_id', 'Barcelona_weather_id', 'Seville_weather_id',
             'Madrid_pressure', 'Bilbao_weather_id', 'Madrid_wind_speed',
             'Bilbao_rain_1h', 'Valencia_wind_speed', 'Bilbao_wind_speed', 'Seville_clouds_all',
             'Barcelona_wind_speed', 'Madrid_clouds_all', 'Seville_wind_speed', 'Barcelona_rain_1h',
             'Seville_rain_1h', 'Bilbao_snow_3h', 'Barcelona_pressure', 'Seville_rain_3h',
-            'Madrid_rain_1h', 'Barcelona_rain_3h', 'Valencia_snow_3h']
+            'Madrid_rain_1h', 'Barcelona_rain_3h', 'Valencia_snow_3h']]
 
-    X=data[features]
+    # ------------------------------------------------------------------------
 
-    return df_train
+    return predict_vector
 
 def load_model(path_to_model:str):
     """Adapter function to load our pretrained model into memory.
@@ -116,4 +114,4 @@ def make_prediction(data, model):
     # Perform prediction with model and preprocessed data.
     prediction = model.predict(prep_data)
     # Format as list for output standardisation.
-    return prediction.tolist()
+    return prediction[0].tolist()
